@@ -42,6 +42,12 @@ class Index extends React.Component {
         return Object.keys(this.state.messages);
     }
 
+    get help() {
+        return this.state.selectedChannel ? 
+            <span>The channel is empty.<br />Brace yourself and write the first message!</span> :
+            <span>No channel selected.<br />Choose one from the left panel.</span>;
+    }
+
     async fetchMessages() {
         if (!this.state.selectedChannel) {
             return;
@@ -66,6 +72,13 @@ class Index extends React.Component {
 
     handleFormSubmit(e) {
         e.preventDefault();
+
+        this.setState({
+            message: '',
+            messages: Object.assign({}, this.state.messages, { 
+                [this.state.selectedChannel]: [...this.messages, this.state.message],
+            }),
+        });
         
         fetch(`/api/${this.state.selectedChannel}`, {
             headers: { 'Content-Type': 'application/json' },
@@ -76,7 +89,7 @@ class Index extends React.Component {
 
     render() {
         return (
-            <div>
+            <React.Fragment>
                 <ul className="navigation">
                     {this.channels.map((channel, i) => (
                         <li
@@ -87,17 +100,19 @@ class Index extends React.Component {
                     ))}
                 </ul>
                 <ul className="message-list">
-                    {this.messages.map((message, i) => (
-                        <li key={i}>{message}</li>
-                    ))}
+                    {this.messages.length ?
+                        this.messages.map((message, i) => (
+                            <li key={i}>{message}</li>
+                        )) :
+                        <li className="_dim">{this.help}</li>}
                 </ul>
                 <div className="editor">
                     <form onSubmit={e => this.handleFormSubmit(e)}>
-                        <input onChange={e => this.handleMessageChange(e)}>{this.statemessage}</input>
+                        <input onChange={e => this.handleMessageChange(e)} value={this.state.message}/>
                         <button disabled={this.canSendMessage ? '' : 'disabled'}>Send</button>
                     </form>
                 </div>
-            </div>
+            </React.Fragment>
         );
     }
 }

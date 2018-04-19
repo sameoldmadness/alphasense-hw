@@ -1,3 +1,95 @@
+:root {
+    --font: Helvetica, Cambria, sans-serif;
+    --border: 1px solid #efefef;
+}
+
 body {
-    color: red;
+    margin: 0;
+
+    font-family: var(--font);
+}
+
+input {
+    font-family: var(--font);
+}
+
+#index {
+    display: grid;
+
+    height: 100vh;
+
+    grid-template-areas:
+        "nav msg"
+        "nav edt";
+    grid-template-rows: 1fr 0fr;
+    grid-template-columns: 250px 1fr;
+}
+
+.navigation {
+    margin: 0;
+    padding: 2em 1em;
+
+    background: mediumvioletred;
+
+    line-height: 1.5;
+
+    grid-area: nav;
+}
+
+.navigation > li {
+    list-style-type:  none;
+
+    cursor: pointer;
+
+    opacity: .6;
+}
+
+.navigation > li._active {
+    font-weight: bold;
+}
+
+.message-list {
+    margin: 0;
+    padding: 2em 1em;
+
+    line-height: 2;
+
+    grid-area: msg;
+}
+
+.message-list > li {
+    list-style-type: none;
+}
+
+.message-list > li._dim {
+    opacity: .4;
+}
+
+.editor {
+    grid-area: edt;
+}
+
+.editor > form {
+    display: flex;
+
+    border-top: var(--border);
+}
+
+.editor input {
+    width: 100%;
+    padding: 0 .3em;
+
+    border: none;
+    border-right: var(--border);
+
+    font-size: 120%;
+}
+
+.editor button {
+    padding: .3em 1em;
+
+    border: none;
+    background: white;
+
+    font-size: 120%;
 }
