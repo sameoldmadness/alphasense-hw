@@ -6,7 +6,7 @@ const {
 } = process.env;
 
 const storage = {
-    general: [],
+    general: ['one', 'two'],
     random: [],
 };
 
@@ -20,7 +20,7 @@ app.get('/api/channels', (_, res) => {
 
 app.get('/api/messages/:channel', (req, res) => {
     const { channel } = req.params;
-    const messages = storage[messages];
+    const messages = storage[channel];
 
     if (!messages) {
         return res.sendStatus(404);
@@ -31,7 +31,8 @@ app.get('/api/messages/:channel', (req, res) => {
 
 // TODO: this one should be POST
 app.put('/api/:channel', express.json(), (req, res) => {
-    const messages = storage[mesages];
+    const { channel } = req.params;
+    const messages = storage[channel];
     const { message } = req.body;
 
     if (!messages) {
