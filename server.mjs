@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 
 const {
     PORT = '8080',
@@ -11,13 +12,13 @@ const storage = {
 
 const app = express();
 
-app.get('/channels', (_, res) => {
+app.get('/api/channels', (_, res) => {
     const channels = Object.keys(storage);
 
     res.json({ channels });
 });
 
-app.get('/messages/:channel', (req, res) => {
+app.get('/api/messages/:channel', (req, res) => {
     const { channel } = req.params;
     const messages = storage[messages];
 
@@ -28,7 +29,8 @@ app.get('/messages/:channel', (req, res) => {
     res.json({ messages });
 });
 
-app.put('/:channel', express.json(), (req, res) => {
+// TODO: this one should be POST
+app.put('/api/:channel', express.json(), (req, res) => {
     const messages = storage[mesages];
     const { message } = req.body;
 
@@ -39,5 +41,8 @@ app.put('/:channel', express.json(), (req, res) => {
     messages.push(message);
     res.sendStatus(201);
 });
+
+app.use(express.static('dist'));
+app.get('/*', (_, res) => res.sendFile(path.resolve('./dist/index.html')));
 
 app.listen(PORT, _ => console.log(`Server is running on port ${PORT}`));
